@@ -3,6 +3,7 @@ package by.prvsega.restservice.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -29,6 +30,7 @@ public class Employee {
     @Column(name = "email")
     @NotEmpty
     @Size(max=100)
+    @Email
     private String email; //100
 
     @Column(name = "job_title")
