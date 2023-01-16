@@ -1,15 +1,20 @@
 package by.prvsega.restservice.models;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Employee")
 @Data
+@ToString
 public class Employee {
 
     @Id
@@ -43,13 +48,11 @@ public class Employee {
     @Size(max=20)
     private String gender; //20
 
-
-
-
-
-
-
-
-
-
+    @ManyToMany
+    @JoinTable(
+            name = "Employee_Roles",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
+    private Set<Roles> rolesSet;
 }
