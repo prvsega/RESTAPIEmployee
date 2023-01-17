@@ -1,12 +1,10 @@
 package by.prvsega.restservice.dto;
-
-import by.prvsega.restservice.models.Roles;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -35,4 +33,5 @@ public class EmployeeDTO {
     @Size(max=20)
     private String gender; //20
 
+    private Set<RoleDTO> rolesSet = new HashSet<>();
 }

@@ -1,6 +1,7 @@
 package by.prvsega.restservice.contollers;
 
 import by.prvsega.restservice.dto.EmployeeDTO;
+import by.prvsega.restservice.mappers.EmployeeMapper;
 import by.prvsega.restservice.models.Employee;
 import by.prvsega.restservice.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,29 +17,30 @@ import java.util.stream.Collectors;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final EmployeeMapper employeeMapper;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService, EmployeeMapper employeeMapper) {
         this.employeeService = employeeService;
+        this.employeeMapper = employeeMapper;
     }
 
     @GetMapping // all employees
     public List<EmployeeDTO> getEmployees(){
-//        return employeeService.findAll().stream().map(this::converterToDTO).collect(Collectors.toList());
-        return employeeService.findAll().stream().map(employeeService::converterToDTO).collect(Collectors.toList());
+        return employeeService.findAll().stream().map(employeeMapper::converterToDTO).collect(Collectors.toList());
     }
 
 
     @GetMapping("/{id}")
     public EmployeeDTO getEmployee(@PathVariable("id") int id){
         Employee employee = employeeService.findOne(id);
-        return employeeService.converterToDTO(employee);
+        return employeeMapper.converterToDTO(employee);
     }
 
     @PostMapping
     public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody @Valid EmployeeDTO employeeDTO){
-        Employee employee = employeeService.save(employeeService.converterToEmployee(employeeDTO));
-        return ResponseEntity.ok(employeeService.converterToDTO(employee));
+        Employee employee = employeeService.save(employeeMapper.converterToEmployee(employeeDTO));
+        return ResponseEntity.ok(employeeMapper.converterToDTO(employee));
     }
 
     @DeleteMapping("/{id}")
@@ -50,8 +52,8 @@ public class EmployeeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable("id") int id, @RequestBody @Valid EmployeeDTO updateEmployeeDTO){
-        Employee employee = employeeService.converterToEmployee(updateEmployeeDTO);
+        Employee employee = employeeMapper.converterToEmployee(updateEmployeeDTO);
         employeeService.update(id, employee);
-        return ResponseEntity.ok(employeeService.converterToDTO(employee));
+        return ResponseEntity.ok(employeeMapper.converterToDTO(employee));
     }
 }

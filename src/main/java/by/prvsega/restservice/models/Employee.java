@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,8 +52,8 @@ public class Employee {
     @ManyToMany
     @JoinTable(
             name = "Employee_Roles",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "roles_id")
+            joinColumns = @JoinColumn(name = "er_employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "er_roles_id")
     )
     private Set<Roles> rolesSet;
 }

@@ -4,6 +4,7 @@ import by.prvsega.restservice.util.RolesName;
 import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,17 +19,14 @@ public class Roles {
 
     @Column(name = "roles_name")
     @NotEmpty
-    private RolesName rolesName;
+    private String rolesName;
 
     @ManyToMany(mappedBy = "rolesSet")
     private List<Employee> employeesList;
 
-    public Roles(RolesName rolesName){
-        this.rolesName = rolesName;
-    }
-
     public Roles() {
 
     }
+
 
 }
