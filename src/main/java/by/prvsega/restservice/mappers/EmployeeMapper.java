@@ -22,4 +22,6 @@ public class EmployeeMapper {
     public Employee converterToEmployee(EmployeeDTO employeeDTO) {
         return modelMapper.map(employeeDTO, Employee.class);
     }
+
 }
+

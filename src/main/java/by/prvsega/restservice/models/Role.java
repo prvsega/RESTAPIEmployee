@@ -1,16 +1,19 @@
 package by.prvsega.restservice.models;
 
-import by.prvsega.restservice.util.RolesName;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "Roles")
-@Data
-public class Roles {
+@Getter
+@Setter
+@NoArgsConstructor
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +27,6 @@ public class Roles {
     @ManyToMany(mappedBy = "rolesSet")
     private List<Employee> employeesList;
 
-    public Roles() {
-
-    }
 
 
 }

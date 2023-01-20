@@ -1,21 +1,21 @@
 package by.prvsega.restservice.models;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.List;
+
 import java.util.Set;
 
 @Entity
 @Table(name = "Employee")
-@Data
-@ToString
+@Getter
+@Setter
+@NoArgsConstructor
 public class Employee {
 
     @Id
@@ -55,5 +55,5 @@ public class Employee {
             joinColumns = @JoinColumn(name = "er_employee_id"),
             inverseJoinColumns = @JoinColumn(name = "er_roles_id")
     )
-    private Set<Roles> rolesSet;
+    private Set<Role> rolesSet;
 }
