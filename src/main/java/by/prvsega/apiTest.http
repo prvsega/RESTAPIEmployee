@@ -1,0 +1,3 @@
+GET http://localhost:8080/employee/1
+content-type: application/json
+###
