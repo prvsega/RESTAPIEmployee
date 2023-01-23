@@ -24,7 +24,7 @@ public class Role {
     @NotEmpty
     private String rolesName;
 
-    @ManyToMany(mappedBy = "rolesSet")
+    @ManyToMany(mappedBy = "rolesSet", fetch = FetchType.LAZY)
     private List<Employee> employeesList;
 
 
