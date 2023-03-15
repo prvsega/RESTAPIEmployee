@@ -49,6 +49,15 @@ public class Employee {
     @Size(max=20)
     private String gender; //20
 
+    @Column(name = "username")
+    @NotEmpty
+    private String username;
+
+    @Column(name = "password")
+    @NotEmpty
+    private String password;
+
+
     @ManyToMany
     @JoinTable(
             name = "Employee_Roles",
