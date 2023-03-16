@@ -21,11 +21,18 @@ public class AuthController {
         return "/auth/test";
     }
 
+    @GetMapping("/user")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public String userPage(){
+
+        return "/auth/role/user";
+    }
+
     @GetMapping("/admin")
 //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String adminPage(){
 
-        return "/auth/admin";
+        return "/auth/role/admin";
     }
 
 
@@ -33,7 +40,13 @@ public class AuthController {
 //    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public String managerPage(){
 
-        return "/auth/manager";
+        return "/auth/role/manager";
+    }
+    @GetMapping("/am")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    public String togetherPage(){
+
+        return "/auth/role/am";
     }
 
 }

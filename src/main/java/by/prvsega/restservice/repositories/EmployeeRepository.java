@@ -2,13 +2,14 @@ package by.prvsega.restservice.repositories;
 
 import by.prvsega.restservice.models.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
-
-    Optional<Employee> findByUsername(String username);
-
+        @Query("select e from Employee e left join fetch e.rolesSet where e.username = ?1")
+//        Optional<Employee> findByUsername(String username);
+        Employee findByUsername (String username);
 }

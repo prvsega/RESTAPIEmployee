@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static java.util.Objects.*;
+
 @Service
 public class EmployeeDetailsServiceImpl implements UserDetailsService {
     private final EmployeeRepository employeeRepository;
@@ -20,14 +22,22 @@ public class EmployeeDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        UserDetails user = (UserDetails) employeeRepository.findByUsername(username).orElseThrow(EmployeeNotFoundException::new);
-//        return user;
-        Optional<Employee> employee = employeeRepository.findByUsername(username);
 
-        if (employee.isEmpty()){
+        Employee employee = employeeRepository.findByUsername(username);
+
+        if (!nonNull(employee)){
             throw new UsernameNotFoundException("User not found");
         }
 
-        return new EmployeeDetailsImpl(employee.get());
+        return EmployeeDetailsImpl.fromUser(employee);
     }
+//        Optional<Employee> employee = employeeRepository.findByUsername(username);
+//
+//        if (employee.isEmpty()){
+//            throw new UsernameNotFoundException("User not found");
+//        }
+//
+//        return new EmployeeDetailsImpl(employee.get());
+//        }
+
 }
