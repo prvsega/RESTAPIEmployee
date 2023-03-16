@@ -1,6 +1,5 @@
 package by.prvsega.restservice.security;
 
-import by.prvsega.restservice.exceptions.EmployeeNotFoundException;
 import by.prvsega.restservice.models.Employee;
 import by.prvsega.restservice.repositories.EmployeeRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 import static java.util.Objects.*;
 
@@ -31,13 +29,6 @@ public class EmployeeDetailsServiceImpl implements UserDetailsService {
 
         return EmployeeDetailsImpl.fromUser(employee);
     }
-//        Optional<Employee> employee = employeeRepository.findByUsername(username);
-//
-//        if (employee.isEmpty()){
-//            throw new UsernameNotFoundException("User not found");
-//        }
-//
-//        return new EmployeeDetailsImpl(employee.get());
-//        }
+
 
 }

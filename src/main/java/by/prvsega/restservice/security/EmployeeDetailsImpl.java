@@ -12,12 +12,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class EmployeeDetailsImpl implements UserDetails {
-//    private final Employee employee;
-//
-//    public EmployeeDetailsImpl(Employee employee) {
-//        this.employee = employee;
-//    }
-
 
     private String username;
     private String password;

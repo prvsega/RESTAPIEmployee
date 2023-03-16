@@ -1,6 +1,5 @@
 package by.prvsega.restservice.contollers;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,42 +9,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthController {
 
     @GetMapping("/login")
-    public String loginPage (){
-
+    public String loginPage() {
         return "/auth/login";
     }
 
     @GetMapping("/test")
-    public String testPage(){
-
+    public String testPage() {
         return "/auth/test";
     }
 
     @GetMapping("/user")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public String userPage(){
-
+    public String userPage() {
         return "/auth/role/user";
     }
 
     @GetMapping("/admin")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public String adminPage(){
-
+    public String adminPage() {
         return "/auth/role/admin";
     }
 
-
     @GetMapping("/manager")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
-    public String managerPage(){
-
+    public String managerPage() {
         return "/auth/role/manager";
     }
-    @GetMapping("/am")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
-    public String togetherPage(){
 
+    @GetMapping("/am")
+    public String togetherPage() {
         return "/auth/role/am";
     }
 
