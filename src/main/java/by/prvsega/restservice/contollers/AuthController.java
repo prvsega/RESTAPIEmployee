@@ -1,41 +1,52 @@
 package by.prvsega.restservice.contollers;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import by.prvsega.restservice.dto.AuthRequestDTO;
+import by.prvsega.restservice.dto.AuthResponseDTO;
+import by.prvsega.restservice.dto.EmployeeDTO;
+import by.prvsega.restservice.security.JWTUtil;
+import by.prvsega.restservice.services.EmployeeService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import javax.validation.Valid;
+
+
+@RestController
 @RequestMapping("/auth")
+@AllArgsConstructor
 public class AuthController {
 
-    @GetMapping("/login")
-    public String loginPage() {
-        return "/auth/login";
+    private final EmployeeService employeeService;
+    private final JWTUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+
+    @PostMapping("/registration")
+    public ResponseEntity <AuthResponseDTO> registration (@RequestBody @Valid EmployeeDTO employeeDTO){
+        employeeService.save(employeeDTO);
+        String token = jwtUtil.generateToken(employeeDTO.getUsername());
+        return ResponseEntity.ok(new AuthResponseDTO(token));
+
+    }
+    @PostMapping("/generationtoken")
+    public ResponseEntity <AuthResponseDTO> performLogin(@RequestBody @Valid AuthRequestDTO authRequestDTO){
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(authRequestDTO.getUsername(), authRequestDTO.getPassword());
+
+    try{
+    authenticationManager.authenticate(authenticationToken);
+    } catch (BadCredentialsException e){
+        return ResponseEntity.badRequest().body(new AuthResponseDTO("Incorrect username or/and password"));
     }
 
-    @GetMapping("/test")
-    public String testPage() {
-        return "/auth/test";
+     String token = jwtUtil.generateToken(authRequestDTO.getUsername());
+
+    return ResponseEntity.ok(new AuthResponseDTO(token));
+
     }
 
-    @GetMapping("/user")
-    public String userPage() {
-        return "/auth/role/user";
-    }
-
-    @GetMapping("/admin")
-    public String adminPage() {
-        return "/auth/role/admin";
-    }
-
-    @GetMapping("/manager")
-    public String managerPage() {
-        return "/auth/role/manager";
-    }
-
-    @GetMapping("/am")
-    public String togetherPage() {
-        return "/auth/role/am";
-    }
 
 }

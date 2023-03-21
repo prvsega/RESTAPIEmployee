@@ -9,6 +9,7 @@ import by.prvsega.restservice.repositories.EmployeeRepository;
 import by.prvsega.restservice.exceptions.EmployeeNotFoundException;
 import by.prvsega.restservice.services.mail.MailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +27,9 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final MailService mailService;
+    private final PasswordEncoder passwordEncoder;
 
     public List<EmployeeDTO> findAll() {
-
         return employeeRepository.findAll().stream().map(employeeMapper::converterToDTO).collect(Collectors.toList());
     }
 
@@ -42,6 +43,7 @@ public class EmployeeService {
     @Transactional
     public EmployeeDTO save(EmployeeDTO employeeDTO) {
         Employee employee = employeeMapper.converterToEmployee(employeeDTO);
+        employee.setPassword(passwordEncoder.encode(employeeDTO.getPassword()));
         addRoleUserForEmployee(employee);
         mailService.sendEmailAboutRegistration(employee.getEmail(), "You registered on my website");
 
@@ -61,6 +63,15 @@ public class EmployeeService {
         if (isNull(id)) {throw new EmployeeNotFoundException();}
         employeeRepository.deleteById(id);
     }
+
+    public EmployeeDTO findUserAndPassword(String username, String password){
+
+        Employee employee = employeeRepository.findByUsernameAndPassword(username, password);
+
+        return employeeMapper.converterToDTO(employee);
+
+    }
+
 
     public void addRoleUserForEmployee(Employee employee) {
         Role role = roleService.getRolesOne(3);

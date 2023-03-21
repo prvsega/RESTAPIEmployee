@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
         @Query("select e from Employee e left join fetch e.rolesSet where e.username = ?1")
         Employee findByUsername (String username);
+
+        Employee findByUsernameAndPassword(String username, String password);
 }

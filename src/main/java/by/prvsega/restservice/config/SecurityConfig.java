@@ -1,45 +1,42 @@
 package by.prvsega.restservice.config;
 
 import by.prvsega.restservice.security.EmployeeDetailsServiceImpl;
+import by.prvsega.restservice.security.JWTFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final EmployeeDetailsServiceImpl employeeDetailsService;
-
-    @Autowired
-    public SecurityConfig(EmployeeDetailsServiceImpl employeeDetailsService) {
-        this.employeeDetailsService = employeeDetailsService;
-    }
-
+    private final JWTFilter jwtFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-            http.authorizeRequests()
-                .antMatchers("/auth/admin").hasRole("ADMIN")
-                    .antMatchers("/auth/am").hasAnyRole("ADMIN","MANAGER")
-                .antMatchers("/auth/manager").hasRole("MANAGER")
-                    .antMatchers("/auth/user").hasRole("USER")
-                .antMatchers("/auth/login", "/error", "/logout").permitAll()
+        http
+
+
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/auth/registration", "auth/generationtoken").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/auth/login")
-                .loginProcessingUrl("/process_login")
-                .defaultSuccessUrl("/auth/test", true)
-                .failureUrl("/auth/login?error")
-                .and()
                 .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/auth/login");
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
@@ -49,8 +46,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    protected PasswordEncoder getPasswordEncoder(){
-//        return new BCryptPasswordEncoder();
-      return NoOpPasswordEncoder.getInstance();
+    protected PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }
