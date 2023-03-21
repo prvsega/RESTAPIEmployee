@@ -28,10 +28,10 @@ public class EmployeeController {
         return employeeService.findOne(id);
     }
 
-    @PostMapping()
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
-        return ResponseEntity.ok(employeeService.save(employeeDTO));
-    }
+//    @PostMapping()
+//    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
+//        return ResponseEntity.ok(employeeService.save(employeeDTO));
+//    }
 
 
     @DeleteMapping("/{id}")

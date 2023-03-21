@@ -44,4 +44,11 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(employeeErrorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<EmployeeErrorResponse> IncorrectPasswordOrLogin(PasswordAndUsernameIncorrectException e){
+        EmployeeErrorResponse employeeErrorResponse = new EmployeeErrorResponse("Username and/or password incorrect", System.currentTimeMillis());
+        return new ResponseEntity<>(employeeErrorResponse, HttpStatus.NOT_FOUND);
+    }
+
+
 }

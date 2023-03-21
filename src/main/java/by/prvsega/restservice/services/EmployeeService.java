@@ -52,7 +52,9 @@ public class EmployeeService {
 
     @Transactional
     public void update(Integer id, EmployeeDTO updateEmployeeDTO) {
-        if (isNull(id)) {throw new EmployeeNotFoundException();}
+        if (isNull(id)) {
+            throw new EmployeeNotFoundException();
+        }
         Employee updateEmployee = employeeMapper.converterToEmployee(updateEmployeeDTO);
         updateEmployee.setId(id);
         employeeRepository.save(updateEmployee);
@@ -60,17 +62,20 @@ public class EmployeeService {
 
     @Transactional
     public void delete(Integer id) {
-        if (isNull(id)) {throw new EmployeeNotFoundException();}
+        if (isNull(id)) {
+            throw new EmployeeNotFoundException();
+        }
         employeeRepository.deleteById(id);
     }
 
-    public EmployeeDTO findUserAndPassword(String username, String password){
-
-        Employee employee = employeeRepository.findByUsernameAndPassword(username, password);
-
-        return employeeMapper.converterToDTO(employee);
-
-    }
+//    public Employee findUserAndPassword(String username, String password) {
+//        Employee employee = employeeRepository.findByUsernameAndPassword(username, password);
+//
+//        if (password != null) {
+//            return employee;
+//        }
+//        throw new PasswordAndUsernameIncorrectException();
+//    }
 
 
     public void addRoleUserForEmployee(Employee employee) {

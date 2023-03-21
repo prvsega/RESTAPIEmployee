@@ -18,6 +18,7 @@ public class JWTUtil {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
+
     public String generateToken(String username) {
         Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(120).toInstant());
 

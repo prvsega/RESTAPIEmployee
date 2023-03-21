@@ -1,6 +1,7 @@
 package by.prvsega.restservice.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final EmployeeDetailsServiceImpl employeeDetailsService;
 
+    @Autowired
     public JWTFilter(JWTUtil jwtUtil, EmployeeDetailsServiceImpl employeeDetailsService) {
         this.jwtUtil = jwtUtil;
         this.employeeDetailsService = employeeDetailsService;
@@ -44,7 +46,7 @@ public class JWTFilter extends OncePerRequestFilter {
                     if (SecurityContextHolder.getContext().getAuthentication() == null) {
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     }
-                }catch (JWTVerificationException exc){
+                } catch (JWTVerificationException exc) {
                     response.sendError(response.SC_BAD_REQUEST, "Invalid JWT Token");
                 }
             }

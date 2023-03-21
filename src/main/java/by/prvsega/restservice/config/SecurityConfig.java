@@ -3,7 +3,6 @@ package by.prvsega.restservice.config;
 import by.prvsega.restservice.security.EmployeeDetailsServiceImpl;
 import by.prvsega.restservice.security.JWTFilter;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -24,11 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-
-
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/registration", "auth/generationtoken").permitAll()
+                .antMatchers("/auth/registration", "/auth/generationtoken", "/employee/1").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .logout()
