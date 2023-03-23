@@ -4,6 +4,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -36,5 +37,18 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         EmployeeErrorResponse employeeErrorResponse = new EmployeeErrorResponse("Employee doesn't found with this id", System.currentTimeMillis());
         return new ResponseEntity<>(employeeErrorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<EmployeeErrorResponse> usernameNotFound(UsernameNotFoundException e){
+        EmployeeErrorResponse employeeErrorResponse = new EmployeeErrorResponse("Username doesn't found", System.currentTimeMillis());
+        return new ResponseEntity<>(employeeErrorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<EmployeeErrorResponse> IncorrectPasswordOrLogin(PasswordAndUsernameIncorrectException e){
+        EmployeeErrorResponse employeeErrorResponse = new EmployeeErrorResponse("Username and/or password incorrect", System.currentTimeMillis());
+        return new ResponseEntity<>(employeeErrorResponse, HttpStatus.NOT_FOUND);
+    }
+
 
 }

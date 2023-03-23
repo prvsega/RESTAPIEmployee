@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -37,6 +38,12 @@ public class EmployeeDTO {
     @NotEmpty
     @Size(max=20)
     private String gender; //20
+
+    @NotEmpty
+    private String username;
+
+    @NotEmpty
+    private String password;
 
     private Set<RoleDTO> rolesSet = new HashSet<>();
 }
