@@ -2,6 +2,7 @@ package by.prvsega.restservice.services;
 
 
 import by.prvsega.restservice.dto.EmployeeDTO;
+import by.prvsega.restservice.exceptions.PasswordAndUsernameIncorrectException;
 import by.prvsega.restservice.mappers.EmployeeMapper;
 import by.prvsega.restservice.models.Employee;
 import by.prvsega.restservice.models.Role;
@@ -67,16 +68,6 @@ public class EmployeeService {
         }
         employeeRepository.deleteById(id);
     }
-
-//    public Employee findUserAndPassword(String username, String password) {
-//        Employee employee = employeeRepository.findByUsernameAndPassword(username, password);
-//
-//        if (password != null) {
-//            return employee;
-//        }
-//        throw new PasswordAndUsernameIncorrectException();
-//    }
-
 
     public void addRoleUserForEmployee(Employee employee) {
         Role role = roleService.getRolesOne(3);
