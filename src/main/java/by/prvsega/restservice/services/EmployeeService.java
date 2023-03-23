@@ -10,6 +10,8 @@ import by.prvsega.restservice.repositories.EmployeeRepository;
 import by.prvsega.restservice.exceptions.EmployeeNotFoundException;
 import by.prvsega.restservice.services.mail.MailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +33,13 @@ public class EmployeeService {
     private final PasswordEncoder passwordEncoder;
 
     public List<EmployeeDTO> findAll() {
-        return employeeRepository.findAll().stream().map(employeeMapper::converterToDTO).collect(Collectors.toList());
+        return employeeRepository.findAll(Sort.by("id")).stream().map(employeeMapper::converterToDTO).collect(Collectors.toList());
     }
+
+    public List<EmployeeDTO> findAllPageable(int page, int size) {
+        return employeeRepository.findAll(PageRequest.of(page, size, Sort.by("id"))).getContent().stream().map(employeeMapper::converterToDTO).collect(Collectors.toList());
+    }
+
 
     public EmployeeDTO findOne(Integer id) {
         if (isNull(id)) {

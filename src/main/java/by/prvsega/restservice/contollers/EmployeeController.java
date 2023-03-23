@@ -21,6 +21,11 @@ public class EmployeeController {
         return employeeService.findAll();
     }
 
+    @GetMapping(params = { "page", "size" }) // page with param page = 0+,size = 1+
+    public List<EmployeeDTO> getEmployeesPageable(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return employeeService.findAllPageable(page, size);
+    }
+
 
     @GetMapping("/{id}")
     public EmployeeDTO getEmployee(@PathVariable("id") int id) {
