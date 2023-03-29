@@ -1,6 +1,7 @@
 package by.prvsega.restservice.contollers;
 
 import by.prvsega.restservice.dto.EmployeeDTO;
+import by.prvsega.restservice.dto.PageResponseDTO;
 import by.prvsega.restservice.services.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,9 @@ public class EmployeeController {
         return employeeService.findAll();
     }
 
-    @GetMapping(params = { "page", "size" }) // page with param page = 0+,size = 1+
-    public List<EmployeeDTO> getEmployeesPageable(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return employeeService.findAllPageable(page, size);
+    @GetMapping(params = { "offset", "limit" }) // page with param page = 0+,size = 1+
+    public PageResponseDTO<EmployeeDTO> getEmployeesPageable(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+        return employeeService.findAllPageable(offset, limit);
     }
 
 
@@ -41,7 +42,7 @@ public class EmployeeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<EmployeeDTO> deleteEmployee(@PathVariable("id") int id) {
-        EmployeeDTO employeeDTO = getEmployee(id);
+        EmployeeDTO employeeDTO = employeeService.findOne(id);
         employeeService.delete(id);
         return ResponseEntity.ok(employeeDTO);
     }

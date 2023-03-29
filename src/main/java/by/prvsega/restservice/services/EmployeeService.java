@@ -2,7 +2,7 @@ package by.prvsega.restservice.services;
 
 
 import by.prvsega.restservice.dto.EmployeeDTO;
-import by.prvsega.restservice.exceptions.PasswordAndUsernameIncorrectException;
+import by.prvsega.restservice.dto.PageResponseDTO;
 import by.prvsega.restservice.mappers.EmployeeMapper;
 import by.prvsega.restservice.models.Employee;
 import by.prvsega.restservice.models.Role;
@@ -10,6 +10,7 @@ import by.prvsega.restservice.repositories.EmployeeRepository;
 import by.prvsega.restservice.exceptions.EmployeeNotFoundException;
 import by.prvsega.restservice.services.mail.MailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.*;
 
@@ -33,11 +33,15 @@ public class EmployeeService {
     private final PasswordEncoder passwordEncoder;
 
     public List<EmployeeDTO> findAll() {
-        return employeeRepository.findAll(Sort.by("id")).stream().map(employeeMapper::converterToDTO).collect(Collectors.toList());
+        List<Employee> employees = employeeRepository.findAll(Sort.by("id"));
+        return employeeMapper.converterToListDTO(employees);
     }
 
-    public List<EmployeeDTO> findAllPageable(int page, int size) {
-        return employeeRepository.findAll(PageRequest.of(page, size, Sort.by("id"))).getContent().stream().map(employeeMapper::converterToDTO).collect(Collectors.toList());
+    public PageResponseDTO<EmployeeDTO> findAllPageable(int offset, int limit) {
+        Page<Employee> page = employeeRepository.findAll(PageRequest.of(offset, limit, Sort.by("id")));
+        List<Employee> employees = employeeRepository.findAll(PageRequest.of(offset, limit, Sort.by("id"))).getContent();
+        return new PageResponseDTO<>(page.getTotalPages(), page.getTotalElements(), employeeMapper.converterToListDTO(employees));
+
     }
 
 
@@ -67,6 +71,7 @@ public class EmployeeService {
         updateEmployee.setId(id);
         employeeRepository.save(updateEmployee);
     }
+
 
     @Transactional
     public void delete(Integer id) {

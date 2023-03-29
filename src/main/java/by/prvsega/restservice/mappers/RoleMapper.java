@@ -1,8 +1,6 @@
 package by.prvsega.restservice.mappers;
 
-import by.prvsega.restservice.dto.EmployeeDTO;
 import by.prvsega.restservice.dto.RoleDTO;
-import by.prvsega.restservice.models.Employee;
 import by.prvsega.restservice.models.Role;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,7 @@ import java.util.Set;
 public class RoleMapper {
 
     private final ModelMapper modelMapper;
+
     @Autowired
     public RoleMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
@@ -29,22 +28,18 @@ public class RoleMapper {
         return modelMapper.map(roleDTO, Role.class);
     }
 
-    public Set<Role> convertSetToRole(Set<RoleDTO> setDTO){
+    public Set<Role> converterSETDTOToRole(Set<RoleDTO> setDTO) {
         Set<Role> set = new HashSet<>();
-        for (RoleDTO roleDTO: setDTO)
-            set.add(convertToRole(roleDTO));
+
+        for (RoleDTO dto : setDTO) {
+            Role role = convertToRole(dto);
+
+            set.add(role);
+        }
 
         return set;
+
     }
-
-    public Set<RoleDTO> convertSetToDTO(Set<Role> setRole){
-        Set<RoleDTO> setDTO = new HashSet<>();
-        for (Role role: setRole)
-            setDTO.add(convertToDTO(role));
-
-        return setDTO;
-    }
-
 
 }
 
