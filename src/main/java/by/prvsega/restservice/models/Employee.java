@@ -9,6 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -57,6 +58,9 @@ public class Employee {
     @NotEmpty
     private String password;
 
+    @Column(name = "image")
+    private byte[] image;
+
 
     @ManyToMany
     @JoinTable(
@@ -65,4 +69,14 @@ public class Employee {
             inverseJoinColumns = @JoinColumn(name = "er_roles_id")
     )
     private Set<Role> rolesSet;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Employee_Files",
+            joinColumns = @JoinColumn(name = "ef_employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "ef_files_id")
+    )
+    private List<Media> mediaList;
+
+
 }

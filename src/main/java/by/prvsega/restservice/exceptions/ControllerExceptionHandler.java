@@ -49,6 +49,15 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         EmployeeErrorResponse employeeErrorResponse = new EmployeeErrorResponse("Username and/or password incorrect", System.currentTimeMillis());
         return new ResponseEntity<>(employeeErrorResponse, HttpStatus.NOT_FOUND);
     }
-
+    @ExceptionHandler
+    public ResponseEntity<EmployeeErrorResponse> FileIsEmpty(FileIsEmptyException e){
+        EmployeeErrorResponse employeeErrorResponse = new EmployeeErrorResponse("File is empty or not found", System.currentTimeMillis());
+        return new ResponseEntity<>(employeeErrorResponse, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler
+    public ResponseEntity<EmployeeErrorResponse> employeeNotFound(MediaNotFoundException e){
+        EmployeeErrorResponse employeeErrorResponse = new EmployeeErrorResponse("MediaFile doesn't found with this id", System.currentTimeMillis());
+        return new ResponseEntity<>(employeeErrorResponse, HttpStatus.NOT_FOUND);
+    }
 
 }

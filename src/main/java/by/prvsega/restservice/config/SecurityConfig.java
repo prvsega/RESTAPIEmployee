@@ -26,7 +26,8 @@ public class SecurityConfig {
 
         http.csrf().disable()
                 .authorizeRequests(authorize -> authorize
-                        .antMatchers("/auth/registration", "/auth/generationtoken", "/auth/**", "/employee/1").permitAll()
+                        .antMatchers("/auth/registration", "/auth/generationtoken", "/auth/**").permitAll()
+                        .antMatchers("/media/**").hasAnyRole("ADMIN", "MANAGER")
                         .anyRequest().authenticated())
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

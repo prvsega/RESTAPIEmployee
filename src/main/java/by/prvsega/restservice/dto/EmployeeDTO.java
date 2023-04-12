@@ -4,11 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -45,5 +46,8 @@ public class EmployeeDTO {
     @NotEmpty
     private String password;
 
+    private byte[] image;
+
     private Set<RoleDTO> rolesSet = new HashSet<>();
+    private List<MediaDTO> mediaList = new ArrayList<>();
 }

@@ -3,8 +3,10 @@ package by.prvsega.restservice.services;
 
 import by.prvsega.restservice.dto.EmployeeDTO;
 import by.prvsega.restservice.dto.PageResponseDTO;
+import by.prvsega.restservice.exceptions.FileIsEmptyException;
 import by.prvsega.restservice.mappers.EmployeeMapper;
 import by.prvsega.restservice.models.Employee;
+import by.prvsega.restservice.models.Media;
 import by.prvsega.restservice.models.Role;
 import by.prvsega.restservice.repositories.EmployeeRepository;
 import by.prvsega.restservice.exceptions.EmployeeNotFoundException;
@@ -16,7 +18,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 import static java.util.Objects.*;
@@ -80,6 +84,32 @@ public class EmployeeService {
         }
         employeeRepository.deleteById(id);
     }
+
+    @Transactional
+    public void saveImage(Integer userId, MultipartFile file) {
+        if (isNull(file)) {
+            throw new FileIsEmptyException();
+        } else
+            try {
+                Employee updateEmployee = employeeRepository.findById(userId).orElseThrow(EmployeeNotFoundException::new);
+                updateEmployee.setImage(file.getBytes());
+                employeeRepository.save(updateEmployee);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+    }
+
+    @Transactional
+    public void saveMedia(Media media, Integer userId){
+        Employee updateEmployee = employeeRepository.findById(userId).orElseThrow(EmployeeNotFoundException::new);
+        List<Media> list = updateEmployee.getMediaList();
+        list.add(media);
+        updateEmployee.setMediaList(list);
+        employeeRepository.save(updateEmployee);
+
+
+    }
+
 
     public void addRoleUserForEmployee(Employee employee) {
         Role role = roleService.getRolesOne(3);

@@ -38,7 +38,7 @@ public class MailService {
         List<String> listEmail = employeeRepository.findAll().stream().map(Employee::getEmail).collect(Collectors.toList()); // get a list of employee email
         String subject = "Employee care department";
         String message = "It is late. You must go to bed, because You will go to work and will be tired tomorrow";
-        listEmail.stream().forEach(email -> sendSimpleEmail(email, subject, message));
+        listEmail.forEach(email -> sendSimpleEmail(email, subject, message));
     }
 
 

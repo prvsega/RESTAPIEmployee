@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class ScheduledTasks {
     private final MailService mailService;
 
-    @Scheduled(cron = "0 0 23 * * MON-FRI")
+//    @Scheduled(cron = "0 0 23 * * MON-FRI")
     private void sendEmailAboutSleep(){
         mailService.sendEmailAllEmployeeToNight();
     }
