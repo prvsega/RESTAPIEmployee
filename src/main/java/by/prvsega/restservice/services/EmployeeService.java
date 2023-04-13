@@ -2,20 +2,26 @@ package by.prvsega.restservice.services;
 
 
 import by.prvsega.restservice.dto.EmployeeDTO;
-import by.prvsega.restservice.exceptions.PasswordAndUsernameIncorrectException;
+import by.prvsega.restservice.dto.PageResponseDTO;
+import by.prvsega.restservice.exceptions.FileIsEmptyException;
 import by.prvsega.restservice.mappers.EmployeeMapper;
 import by.prvsega.restservice.models.Employee;
+import by.prvsega.restservice.models.Media;
 import by.prvsega.restservice.models.Role;
 import by.prvsega.restservice.repositories.EmployeeRepository;
 import by.prvsega.restservice.exceptions.EmployeeNotFoundException;
 import by.prvsega.restservice.services.mail.MailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.*;
 
@@ -31,8 +37,17 @@ public class EmployeeService {
     private final PasswordEncoder passwordEncoder;
 
     public List<EmployeeDTO> findAll() {
-        return employeeRepository.findAll().stream().map(employeeMapper::converterToDTO).collect(Collectors.toList());
+        List<Employee> employees = employeeRepository.findAll(Sort.by("id"));
+        return employeeMapper.converterToListDTO(employees);
     }
+
+    public PageResponseDTO<EmployeeDTO> findAllPageable(int offset, int limit) {
+        Page<Employee> page = employeeRepository.findAll(PageRequest.of(offset, limit, Sort.by("id")));
+        List<Employee> employees = employeeRepository.findAll(PageRequest.of(offset, limit, Sort.by("id"))).getContent();
+        return new PageResponseDTO<>(page.getTotalPages(), page.getTotalElements(), employeeMapper.converterToListDTO(employees));
+
+    }
+
 
     public EmployeeDTO findOne(Integer id) {
         if (isNull(id)) {
@@ -61,6 +76,7 @@ public class EmployeeService {
         employeeRepository.save(updateEmployee);
     }
 
+
     @Transactional
     public void delete(Integer id) {
         if (isNull(id)) {
@@ -68,6 +84,32 @@ public class EmployeeService {
         }
         employeeRepository.deleteById(id);
     }
+
+    @Transactional
+    public void saveImage(Integer userId, MultipartFile file) {
+        if (isNull(file)) {
+            throw new FileIsEmptyException();
+        } else
+            try {
+                Employee updateEmployee = employeeRepository.findById(userId).orElseThrow(EmployeeNotFoundException::new);
+                updateEmployee.setImage(file.getBytes());
+                employeeRepository.save(updateEmployee);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+    }
+
+    @Transactional
+    public void saveMedia(Media media, Integer userId){
+        Employee updateEmployee = employeeRepository.findById(userId).orElseThrow(EmployeeNotFoundException::new);
+        List<Media> list = updateEmployee.getMediaList();
+        list.add(media);
+        updateEmployee.setMediaList(list);
+        employeeRepository.save(updateEmployee);
+
+
+    }
+
 
     public void addRoleUserForEmployee(Employee employee) {
         Role role = roleService.getRolesOne(3);

@@ -1,15 +1,19 @@
 package by.prvsega.restservice.dto;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class RoleDTO {
+public class MediaDTO {
+
     private int id;
-    private String rolesName;
+    @NotEmpty
+    private String path;
 
 }
